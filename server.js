@@ -16,5 +16,19 @@ const db = mysql.createConnection(
 );
 
 inquirer.prompt([
+    {
+        type: 'list',
+        name: 'start',
+        message: 'What would you like to do?',
+        choices: [
+            'View all departments',
+            'View all roles',
+            'View all employees',
+            'add a department',
+            'add a role',
+            'add an employee',
+            'update an employee role'
+        ]
+    },
     
 ])
