@@ -1,26 +1,33 @@
 INSERT INTO departments (department_name)
-VALUES (Sales),
-       (Legal),
-       (Finance),
-       (R&D);
+VALUES ('Sales'),
+       ('Legal'),
+       ('Finance'),
+       ('R&D');
+
+INSERT INTO roles (role_name, department_id, salary)
+VALUES ('Sales Lead', 1, 75000),
+       ('Salesperson', 1, 52000),
+       ('Scientist l', 4, 75000),
+       ('Scientist ll', 4, 95000),
+       ('Lawyer', 2, 200000),
+       ('Legal Aid', 2, 95000),
+       ('Accountant', 3, 210000),
+       ('Accounting Assistant', 3, 80000);
+
+INSERT INTO employees( first_name, last_name, role_id)
+VALUES ('Emma', 'Smith', 3), 
+       ('Noah', 'Johnson', 4),
+       ('Olivia', 'Williams', 7),
+       ('Liam', 'Jones', 8), 
+       ('Ava', 'Brown', 1), 
+       ('WIlliam', 'Davis', 2),
+       ('Sophia', 'Miller', 5),
+       ('James', 'Wilson', 6); 
+
+UPDATE employees SET manager_id = 1 WHERE ID = 2;
+UPDATE employees SET manager_id = 3 WHERE ID = 4;
+UPDATE employees SET manager_id = 5 WHERE ID = 6;
+UPDATE employees SET manager_id = 8 WHERE ID = 7;
 
 
-INSERT INTO roles (role_name, department, salary)
-VALUES (Sales Lead, Sales, 75000),
-       (Salesperson, Sales, 52000),
-       (Scientist l, R&D, 75000),
-       (Scientist ll, R&D, 95000),
-       (Lawyer, Legal, 200000),
-       (Legal Aid, Legal, 95000)
-       (Accountant, Finance, 210000),
-       (Accounting Assistant, Finance, 80000);
 
-INSERT INTO employees( first_name, last_name, title, department, salary, manager)
-VALUES (Emma, Smith, Scientist l, R&D, 75000, Noah Johnson),
-       (Noah, Johnson, Scientist ll, R&D, 95000),
-       (Olivia, Williams, Accountant, Finance, 210000),
-       (Liam, Jones, Accounting Assistant, Finance, 80000),
-       (Ava, Brown, Sales Lead, Sales, 75000),
-       (WIlliam, Davis, Salesperson, Sales, 52000, Ava Brown),
-       (Sophia, Miller, Legal Aid, Legal, 95000, James Wilson),
-       (James, Wilson, Lawyer, Legal, 200000);
