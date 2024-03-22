@@ -22,9 +22,8 @@ There are no installation steps to run the project as it runs in your terminal. 
 
 Here is a video displaying how the project works.
 
-    ```md
-    ![alt text](assets/images/screenshot.png)
-    ```
+    [Demo](Assets/EmployeeTracker_Demo.webm)  
+ 
 
 ## Credits
 
