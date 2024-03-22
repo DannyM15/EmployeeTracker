@@ -14,11 +14,12 @@ const db = mysql.createConnection(
   },
   console.log(`Connected to the courses_db database.`)
 );
-
+// list fucntions to be available as choices inside the prompts
 let namesList
 let deptList
 let roleList
 
+// queries to create the list functions. 
 db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', (err, results) => {
   if (err) {
     console.error('Error fetching names from database:', err);
@@ -30,6 +31,7 @@ db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employ
       value: row.id
   }));
 
+  // Each query is nested inside another to be available in the prompts
   db.query('SELECT id, department_name FROM departments', (err, results) => {
     if (err) {
       console.error('Error fetching departments from database:', err);
@@ -50,6 +52,8 @@ db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employ
         value: row.id
       }));
 
+      // Inquierer prompts for the employee menu. 
+      // Using the "when" property to determine what follow up questions are asked if needed.
 const prompt = () => {
 
         inquirer.prompt([
@@ -128,7 +132,10 @@ const prompt = () => {
           },
 
         ])
-
+          // if statements with a different query depending on which option was selected at the start
+          // console.log to display what was added or changed
+          // console.table used to display the results if asking for all of a subject
+          // dont forget to check out the exit message
           .then((data) => {
             if (data.start === 'Add a department') {
               db.query('INSERT INTO departments (department_name) VALUES (?) ', [data.AddDept], (error, results) => {
