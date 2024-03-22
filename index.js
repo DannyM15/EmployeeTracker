@@ -15,20 +15,27 @@ const db = mysql.createConnection(
   console.log(`Connected to the courses_db database.`)
 );
 
-db.query('SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employees', (err, results) => {
+let namesList
+let deptList
+let roleList
+
+db.query('SELECT id, CONCAT(first_name, " ", last_name) AS full_name FROM employees', (err, results) => {
   if (err) {
     console.error('Error fetching names from database:', err);
     return;
   }
 
-  const namesList = results.map((row) => row.full_name);
+  namesList = results.map((row) => ({
+      name: row.full_name,
+      value: row.id
+  }));
 
   db.query('SELECT id, department_name FROM departments', (err, results) => {
     if (err) {
       console.error('Error fetching departments from database:', err);
       return;
     }
-    const deptList = results.map((row) => ({
+    deptList = results.map((row) => ({
       name: row.id,
       value: row.name
     }));
@@ -38,9 +45,9 @@ db.query('SELECT CONCAT(first_name, " ", last_name) AS full_name FROM employees'
         console.error('Error fetching departments from database:', err);
         return;
       }
-      const roleList = results.map((row) => ({
-        name: row.id,
-        value: row.name
+      roleList = results.map((row) => ({
+        name: row.role_name,
+        value: row.id
       }));
 
 const prompt = () => {
@@ -99,21 +106,22 @@ const prompt = () => {
             when: (answer) => answer.start === 'Add an employee',
           },
           {
-            type: 'input',
+            type: 'list',
             name: 'AddEmployee3',
             message: 'What is the role of the employee?',
+            choices: roleList,
             when: (answer) => answer.start === 'Add an employee',
           },
           {
             type: 'list',
-            name: 'updateEmp',
+            name: 'updateEmp1',
             message: 'Who would you like to update?',
             choices: namesList,
             when: (answer) => answer.start === 'Update an employee role',
           },
           {
             type: 'list',
-            name: 'updateEmp',
+            name: 'updateEmp2',
             message: 'To which role would you like to update to?',
             choices: roleList,
             when: (answer) => answer.start === 'Update an employee role',
@@ -128,7 +136,7 @@ const prompt = () => {
                   console.error(error);
                 }
                 else {
-                  console.table(results);
+                  console.log(data.AddDept + ' Added to departments');
                   prompt();
                 }
               })
@@ -168,35 +176,36 @@ const prompt = () => {
               })
             }
             if (data.start === 'Add a role') {
-              db.query('INSERT INTO roles (role_name, department_id, salary) VALUES (?) ', [data.AddRole1, data.AddRole2, data.AddRole3], (error, results) => {
+              db.query('INSERT INTO roles (role_name, department_id, salary) VALUES (?,?,?) ', [data.AddRole1, data.AddRole2, data.AddRole3], (error, results) => {
                 if (error) {
                   console.error(error);
                 }
                 else {
-                  console.table(results);
+                  console.table(data.AddRole1 + ' added as a role');
                   prompt();
                 }
               })
             }
             if (data.start === 'Add an employee') {
-              db.query('INSERT INTO employees (first_name, last_name, role_id) VALUES (?) ', [data.AddEmployee1, data.AddEmployee2, data.AddEmployee3], (error, results) => {
+              db.query('INSERT INTO employees (first_name, last_name, role_id) VALUES (?,?,?) ', [data.AddEmployee1, data.AddEmployee2, data.AddEmployee3], (error, results) => {
                 if (error) {
                   console.error(error);
                 }
                 else {
-                  console.table(results);
+                  console.log(data.AddEmployee1 + ' ' + data.AddEmployee2 + ' added as an employee');
                   prompt();
                 }
               })
             }
             if (data.start === 'Update an employee role') {
-              db.query('UPDATE  ', results, (error, results) => {
+
+              db.query('UPDATE employees SET role_id = (?) WHERE id = (?) ', [data.updateEmp2, data.updateEmp1], (error, results) => {
                 if (error) {
                   console.error(error);
                 }
                 else {
-                  console.log(results + ' added to roles');
-
+                  console.log('Employee role udpated to ' + data.updateEmp2);
+                  prompt();
                 }
               })
             }
